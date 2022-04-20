@@ -18,10 +18,10 @@ before_install:
   - docker build -t estonezzz/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run estonezzz/react-test npm test -- --coverage
+  - docker run -e CI=true estonezzz/react-test npm test
 
 deploy:
   provider: script
-  script: ./deploy.sh
+  script: bash ./deploy.sh
   on:
     branch: master
