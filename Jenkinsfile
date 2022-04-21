@@ -3,7 +3,6 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS=credentials('docker-hub-credentials')
         CLOUDSDK_CORE_DISABLE_PROMPTS=1
-        SHA=$(git rev-parse HEAD)
     }
     stages {
         stage('Test') {
@@ -17,9 +16,9 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    docker build -t estonezzz/multi-client:latest -t estonezzz/multi-client:$SHA -f ./client/Dockerfile ./client
-                    docker build -t estonezzz/multi-server:latest -t estonezzz/multi-server:$SHA -f ./server/Dockerfile ./server
-                    docker build -t estonezzz/multi-worker:latest -t estonezzz/multi-worker:$SHA -f ./worker/Dockerfile ./worker
+                    docker build -t estonezzz/multi-client:latest -t estonezzz/multi-client:${env.GIT_COMMIT} -f ./client/Dockerfile ./client
+                    docker build -t estonezzz/multi-server:latest -t estonezzz/multi-server:${env.GIT_COMMIT} -f ./server/Dockerfile ./server
+                    docker build -t estonezzz/multi-worker:latest -t estonezzz/multi-worker:${env.GIT_COMMIT} -f ./worker/Dockerfile ./worker
                 '''
             }
         }
@@ -30,9 +29,9 @@ pipeline {
                     docker push estonezzz/multi-client:latest
                     docker push estonezzz/multi-server:latest
                     docker push estonezzz/multi-worker:latest
-                    docker push estonezzz/multi-client:$SHA
-                    docker push estonezzz/multi-server:$SHA
-                    docker push estonezzz/multi-worker:$SHA
+                    docker push estonezzz/multi-client:${env.GIT_COMMIT}
+                    docker push estonezzz/multi-server:${env.GIT_COMMIT}
+                    docker push estonezzz/multi-worker:${env.GIT_COMMIT}
                 '''
             }
         }
