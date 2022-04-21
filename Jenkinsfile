@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS=credentials('docker-hub-credentials')
         CLOUDSDK_CORE_DISABLE_PROMPTS=1
-        SHA=sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+        SHA=sh(script: 'git rev-parse HEAD | | cut -c 1-6', returnStdout: true).trim()
 
         PROJECT_ID = 'multi-k8s-347813'
         CLUSTER_NAME = 'multi-cluster'
@@ -22,9 +22,9 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    docker build -t estonezzz/multi-client:latest -t estonezzz/multi-client:${SHA:0:6} -f ./client/Dockerfile ./client
-                    docker build -t estonezzz/multi-server:latest -t estonezzz/multi-server:${SHA:0:6} -f ./server/Dockerfile ./server
-                    docker build -t estonezzz/multi-worker:latest -t estonezzz/multi-worker:${SHA:0:6} -f ./worker/Dockerfile ./worker
+                    docker build -t estonezzz/multi-client:latest -t estonezzz/multi-client:$SHA -f ./client/Dockerfile ./client
+                    docker build -t estonezzz/multi-server:latest -t estonezzz/multi-server:$SHA -f ./server/Dockerfile ./server
+                    docker build -t estonezzz/multi-worker:latest -t estonezzz/multi-worker:$SHA -f ./worker/Dockerfile ./worker
                 '''
             }
         }
@@ -37,9 +37,9 @@ pipeline {
                         docker push estonezzz/multi-client:latest
                         docker push estonezzz/multi-server:latest
                         docker push estonezzz/multi-worker:latest
-                        docker push estonezzz/multi-client:${SHA:0:6}
-                        docker push estonezzz/multi-server:${SHA:0:6}
-                        docker push estonezzz/multi-worker:${SHA:0:6}
+                        docker push estonezzz/multi-client:$SHA
+                        docker push estonezzz/multi-server:$SHA
+                        docker push estonezzz/multi-worker:$SHA
                     '''
                     }
                 }          
