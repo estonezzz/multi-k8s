@@ -8,6 +8,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
+                    echo "This is git commit ${env.GIT_COMMIT}"
                     docker build -t estonezzz/react-test -f ./client/Dockerfile.dev ./client
                     docker run -e CI=true estonezzz/react-test npm test
                 '''
