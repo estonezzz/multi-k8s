@@ -16,6 +16,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
+                    echo "This is git commit ${env.GIT_COMMIT}" 
                     docker build -t estonezzz/multi-client:latest -t estonezzz/multi-client:${env.GIT_COMMIT} -f ./client/Dockerfile ./client
                     docker build -t estonezzz/multi-server:latest -t estonezzz/multi-server:${env.GIT_COMMIT} -f ./server/Dockerfile ./server
                     docker build -t estonezzz/multi-worker:latest -t estonezzz/multi-worker:${env.GIT_COMMIT} -f ./worker/Dockerfile ./worker
