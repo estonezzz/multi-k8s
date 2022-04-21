@@ -31,12 +31,7 @@ pipeline {
         stage('Push') {
             
                 steps {
-                    def retryAttempt = 0
-                    retry(2) {
-                        if (retryAttempt > 0) {
-                        sleep(1000 * 2 + 2000 * retryAttempt)
-                }
-                    retryAttempt = retryAttempt + 1
+                    retry(3) {
                     sh '''
                         echo "$DOCKERHUB_CREDENTIALS_PSW" | docker login -u "$DOCKERHUB_CREDENTIALS_USR" --password-stdin
                         docker push estonezzz/multi-client:latest
@@ -47,7 +42,7 @@ pipeline {
                         docker push estonezzz/multi-worker:${SHA:0:6}
                     '''
                     }
-                }
+                }          
             
         }
         stage('Deploy-to-GKE') {
