@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS=credentials('docker-hub-credentials')
         CLOUDSDK_CORE_DISABLE_PROMPTS=1
-        SHA=sh(script: 'git rev-parse HEAD | | cut -c 1-6', returnStdout: true).trim()
+        SHA=sh(script: 'git rev-parse HEAD | cut -c 1-6', returnStdout: true).trim()
 
         PROJECT_ID = 'multi-k8s-347813'
         CLUSTER_NAME = 'multi-cluster'
