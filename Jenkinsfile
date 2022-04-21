@@ -8,7 +8,7 @@ pipeline {
         PROJECT_ID = 'multi-k8s-347813'
         CLUSTER_NAME = 'multi-cluster'
         LOCATION = 'us-central1-c'
-        CREDENTIALS_ID = credentials('multi-k8s-347813')
+        CREDENTIALS_ID = 'multi-k8s-347813'
     }
     stages {
         stage('Test') {
