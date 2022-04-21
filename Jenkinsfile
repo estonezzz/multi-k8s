@@ -52,7 +52,7 @@ pipeline {
                 projectId: env.PROJECT_ID,
                 clusterName: env.CLUSTER_NAME,
                 location: env.LOCATION,
-                manifestPattern: 'k8s/*.yml',
+                manifestPattern: 'deploy_GKE.yml',
                 credentialsId: env.CREDENTIALS_ID,
                 verifyDeployments: true])
    
