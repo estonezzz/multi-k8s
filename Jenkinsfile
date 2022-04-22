@@ -47,6 +47,7 @@ pipeline {
         }
         stage('Deploy-to-GKE') {
             steps {
+                sh "sed -i 's/:latest/:$SHA/g' deploy_GKE.yml"
                 step([
                 $class: 'KubernetesEngineBuilder',
                 projectId: env.PROJECT_ID,
