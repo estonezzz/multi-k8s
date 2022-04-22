@@ -47,8 +47,10 @@ pipeline {
         }
         stage('Deploy-to-GKE') {
             steps {
-                sh "find k8s/*.yml -exec cat {} \; -exec echo -e '\n---\n' \; > deploy_GKE.yml"
-                sh "sed -i 's/:latest/:$SHA/g' deploy_GKE.yml"
+                sh '''
+                        find k8s/*.yml | xargs -I{} sh -c "cat {}; echo '\n---\n'" > deploy_GKE.yml
+                        sed -i 's/:latest/:$SHA/g' deploy_GKE.yml
+                '''
                 step([
                 $class: 'KubernetesEngineBuilder',
                 projectId: env.PROJECT_ID,
