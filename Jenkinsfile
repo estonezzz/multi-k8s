@@ -47,7 +47,7 @@ pipeline {
         }
         stage('Deploy-to-GKE') {
             steps {
-                sh "find "$pwd"/k8s -type f -maxdepth 1 | xargs | sed -i 's/:latest/:$SHA/g'"
+                sh "find $pwd/k8s -type f -maxdepth 1 | xargs | sed -i 's/:latest/:$SHA/g'"
                 //sh "sed -i 's/:latest/:$SHA/g' deploy_GKE.yml"
                 step([
                 $class: 'KubernetesEngineBuilder',
