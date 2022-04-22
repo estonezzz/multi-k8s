@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: uuemaa-net-tls
+spec:
+  secretName: uuemaa-net
+  issueRef: 
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: uuemaa.net
+  dnsNames: 
+    - uuemaa.net
+    - www.uuemaa.net
