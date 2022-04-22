@@ -47,13 +47,14 @@ pipeline {
         }
         stage('Deploy-to-GKE') {
             steps {
-                sh "sed -i 's/:latest/:$SHA/g' deploy_GKE.yml"
+                sh "find "$pwd"/k8s -type f -maxdepth 1 | xargs | sed -i 's/:latest/:$SHA/g'"
+                //sh "sed -i 's/:latest/:$SHA/g' deploy_GKE.yml"
                 step([
                 $class: 'KubernetesEngineBuilder',
                 projectId: env.PROJECT_ID,
                 clusterName: env.CLUSTER_NAME,
                 location: env.LOCATION,
-                manifestPattern: 'deploy_GKE.yml',
+                manifestPattern: 'k8s/',
                 credentialsId: env.CREDENTIALS_ID,
                 verifyDeployments: true])
    
