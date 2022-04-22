@@ -4,7 +4,7 @@ metadata:
   name: uuemaa-net-tls
 spec:
   secretName: uuemaa-net
-  issueRef: 
+  issuerRef: 
     name: letsencrypt-prod
     kind: ClusterIssuer
   commonName: uuemaa.net
