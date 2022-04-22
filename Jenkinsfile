@@ -49,6 +49,7 @@ pipeline {
             steps {
                 sh '''
                         find k8s/*.yml | xargs -I{} sh -c "cat {}; echo '\n---\n'" > deploy_GKE.yml
+                        cat deploy_GKE.yml
                         sed -i 's/:latest/:$SHA/g' deploy_GKE.yml
                 '''
                 step([
