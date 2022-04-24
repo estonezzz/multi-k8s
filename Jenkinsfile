@@ -4,11 +4,6 @@ pipeline {
         DOCKERHUB_CREDENTIALS=credentials('docker-hub-credentials')
         CLOUDSDK_CORE_DISABLE_PROMPTS=1
         SHA=sh(script: 'git rev-parse HEAD | cut -c 1-6', returnStdout: true).trim()
-
-        PROJECT_ID = 'multi-k8s-347813'
-        CLUSTER_NAME = 'multi-cluster'
-        LOCATION = 'us-central1-c'
-        CREDENTIALS_ID = 'multi-k8s-347813'
     }
     stages {
         stage('Test') {
@@ -44,25 +39,6 @@ pipeline {
                     }
                 }          
             
-        }
-        stage('Deploy-to-GKE') {
-            steps {
-                sh '''
-                        find k8s/*.yml | xargs -I{} sh -c "cat {}; echo '\n---\n'" > deploy_GKE.yml
-                        sed -i '1h;1!H;$!d;g;s/\\(.*\\)---/\\1/' deploy_GKE.yml
-                        sed -i 's/:latest/:$SHA/g' deploy_GKE.yml
-                        cat deploy_GKE.yml
-                '''
-                step([
-                $class: 'KubernetesEngineBuilder',
-                projectId: env.PROJECT_ID,
-                clusterName: env.CLUSTER_NAME,
-                location: env.LOCATION,
-                manifestPattern: 'deploy_GKE.yml',
-                credentialsId: env.CREDENTIALS_ID,
-                verifyDeployments: true])
-   
-            }
         }
     }
 
