@@ -40,6 +40,24 @@ pipeline {
                 }          
             
         }
+         stage ('AKS Deploy') {
+        steps {
+            sh '''
+                        find k8s/*.yml | xargs -I{} sh -c "cat {}; echo '\n---\n'" > deploy_AKS.yml
+                        sed -i '1h;1!H;$!d;g;s/\\(.*\\)---/\\1/' deploy_AKS.yml
+                        sed -i 's/:latest/:$SHA/g' deploy_AKS.yml
+                        cat deploy_AKS.yml
+                '''
+            script {
+                kubernetesDeploy(
+                    configs: 'deploy_AKS.yml',
+                    kubeconfigId: 'AKS-k8s-multi',
+                    enableConfigSubstitution: true
+                    )           
+               
+            }
+        }
+    }
     }
 
 }
